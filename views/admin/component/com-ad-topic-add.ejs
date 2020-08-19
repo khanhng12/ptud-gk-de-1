@@ -1,0 +1,69 @@
+<section class="containerz">
+    <div class="content ml-2 mr-2 ">
+        <h4 class="pt-3 ml-4 col-8">Bài viết</h4>
+        <hr>
+        <form action="/admin/topics/addnew" method="POST">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default" name="TieuDe">Tiêu đề</span>
+                </div>
+                <input name="TieuDe" type="text" class="form-control" aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default">
+
+            </div>
+            <h5>Danh mục</h5>
+            <div class="categoriesList">
+                <ul class="category">
+                    <% for(let i =0;i < list.length;i++) {%> 
+                        <li><label for="dm<%= i%>">
+                            <input type="checkbox">
+                            <input type="text" id="dm<%= i %>" value="<%= list[i].IdDanhMuc %>" hidden>
+                            <%=list[i].TenDanhMuc%>
+                        </label></li>
+                    <% } %> 
+                </ul>
+            </div>
+            <h5>Nội dung</h5>
+            <textarea name="NoiDung" id="editor1"></textarea>
+            <button class="btn btn-light border mt-2 ml-2">Hủy</button>
+            <button class="btn btn-warning mt-2">Xóa hết</button>
+            <button class="btn btn-success mt-2 float-right mr-2" type="submit">Xác nhận</button>
+        </form>
+    </div>
+</section>
+
+<style>
+    .ck-editor__editable_inline {
+        min-height: 400px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("ul.menuleft li").removeClass('active');
+        $("ul.menuleft li:nth-child(2)").addClass("active");
+        $("ul.menuleft li").click(function () {
+            $("ul.menuleft li").removeClass('active');
+            $(this).toggleClass("active");
+        });
+        $('ul.category li label input').change(function(){
+            var parent = $(this).parent();
+            var name = parent.children('ul.category li label input:nth-child(2)').attr('id');
+            if($(this).attr('checked') == undefined){
+                $(this).attr('checked','checked');
+                parent.children('ul.category li label input:nth-child(2)').attr('name',name);
+            }
+            else{
+                $(this).removeAttr('checked');
+                parent.children('ul.category li label input:nth-child(2)').removeAttr('name');
+            }
+        });
+    });
+
+
+    ClassicEditor
+        .create(document.querySelector('#editor1'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>

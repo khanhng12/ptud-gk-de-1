@@ -1,0 +1,95 @@
+<section class="containerz">
+    <div class="mr-2 ml-2">
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Tên danh mục</th>
+              </tr>
+            </thead>
+            <tbody class="bodytable">
+              <% for(let i=0;i<categories.length;i++){ %>
+                <tr>
+                  <td><%= categories[i].IdDanhMuc %> </td>
+                  <td><a class="edit-category text-primary" href="#" name = 'hiall'><%= categories[i].TenDanhMuc %></a></td>
+                  <td><a class="delete" href="#"><i class="fas fa-trash"></i></a></td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+          <button class="btn btn-success show-add" type="button">Thêm</button>
+          <!-- Add category div -->
+          <div class="add-card shadow hide">
+            <div class="h5 text-center mb-5 mt-3">Thêm danh mục</div>
+            <form action="/admin/categories/addnew" method="POST" class="ml-2 mr-2">
+              
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                </div>
+                <input type="text" class="form-control" name="categoryName" placeholder="Tên danh mục" aria-label="Username" aria-describedby="basic-addon1">
+              </div>
+              <button class="btn btn-success float-left" type="submit">Xác nhận</button>
+              <button class="btn btn-secondary float-right cancel" type="button">Hủy</button>
+            </form>
+          </div>
+          <!-- Edit category div -->
+          <div class="edit-card shadow hide">
+            <div class="h5 text-center mb-5 mt-3">Sửa danh mục</div>
+            <form action="/admin/categories/edit" method="POST" class="ml-2 mr-2">
+              <input type="text" class="form-control hide" name="IdDanhMuc" placeholder="Id">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                </div>
+                <input id="input-edit" type="text" class="form-control" name="TenDanhMuc" placeholder="Tên danh mục">
+              </div>
+              <button class="btn btn-success float-left" type="submit">Xác nhận</button>
+              <button class="btn btn-secondary float-right edit-cancel" type="button">Hủy</button>
+            </form>
+          </div>
+    </div>
+</section>
+
+<script>
+  $(document).ready(function(){
+    $('.show-add').click(function(){
+      $('.add-card').toggleClass('hide');
+    });
+    $('.cancel').click(function(){
+      $('.add-card').addClass('hide');
+    });
+    $('.edit-category').click(function(){
+      var row = $(this).parent().parent();
+      var idCategory = row.children('td:nth-child(1)');
+      
+      var editCard = $('.edit-card');
+      var inputCategory = $('#input-edit');
+      var editFrom = $('.edit-card form');
+      inputCategory.val($(this).text());
+      editFrom.children('input:first-child').val(idCategory.text().trim());
+
+      editCard.toggleClass('hide');
+    });
+    $('.edit-cancel').click(function(){
+      $('.edit-card').addClass('hide');
+    });
+    $('a.delete').click(function(){
+      var row = $(this).parent().parent();
+      var idCategory = row.children('td:nth-child(1)');
+      event.defaultPrevented;
+      var accepted = confirm('Chắc chắn xóa? ');
+      console.log('accepted: '+accepted);
+      if(accepted){
+        console.log('Đang tạo form yêu cầu xóa danh mục');
+        var theForm = document.createElement('form');
+        theForm.action = '/admin/categories/delete/' + idCategory.text().trim().toString();
+        console.log('action:'+ theForm.action);
+        theForm.method = 'POST';
+        $('body').append(theForm);
+        theForm.submit();
+        console.log('Đã gửi yêu cầu xóa danh mục có id = '+ idCategory.text().trim());
+      }
+    });
+  })
+
+</script>
+

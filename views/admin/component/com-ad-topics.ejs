@@ -1,29 +1,33 @@
 <section class="containerz">
-    <div class="content">
+    <div class="content ml-2 mr-2">
         <h4 class="pt-3 ml-4 col-8">Bài viết</h4>
         <hr>
         <div class="text-center">
             <label for="search" >Tìm kiếm<input id="search" class="ml-3" type="text"></label>
         </div>  
-        <button class="btnadd">Thêm mới</button>
+        <button class="btnadd" onclick="document.location =document.location+'/addnew'">Thêm mới</button>
         <table class="table table-info">
             <thead>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
-                <th scope="col"></th>
+                <th scope="col">Tiêu đề</th>
+                <th scope="col">Người đăng</th>
+                <th scope="col">Ngày đăng</th>
+                <th scope="col">Danh mục</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td><a href="#"><i class="fas fa-edit"></i></a><a href="#"><i class="fas fa-trash"></i></a></td>
-              </tr>
+
+              <% for(var i =0 ; i < listTopics.length; i++) {%>
+                <tr>
+                  <th scope="row"><a href="/admin/topics/edit/<%= listTopics[i].TieuDeURL %>"> <%= listTopics[i].TieuDe %> </a></th>
+                  <td><%= listTopics[i].Ten %></td>
+                  <td class="date">
+                    <% var date = listTopics[i].NgayViet; %> 
+                    <%= date.toString().slice(0,15) %></td>
+                  <td><a class="delete" href="#"><i class="fas fa-trash"></i></a></td>
+                  <td hidden><%= listTopics[i].TieuDeURL %> </td>
+                </tr>
+              <% } %> 
             </tbody>
           </table>
           <nav aria-label="Page navigation example">
@@ -33,9 +37,9 @@
                   <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item"><a class="page-link" href="/admin/topics/page/1">1</a></li>
+              <li class="page-item"><a class="page-link" href="/admin/topics/page/2">2</a></li>
+              <li class="page-item"><a class="page-link" href="/admin/topics/page/3">3</a></li>
               <li class="page-item">
                 <a class="page-link" href="#" aria-label="Next">
                   <span aria-hidden="true">&raquo;</span>
@@ -45,3 +49,24 @@
           </nav>
     </div>
 </section>
+<script>
+  $(document).ready(function(){
+    $('.delete').click(function(){
+      event.preventDefault();
+      var accepted = confirm('Bạn chắc chắn xóa chứ?');
+      if(accepted){
+        console.log('ok xoa thoi');
+        console.log($(this));
+        var trTag = $(this).parent().parent();
+        var id = trTag.children().last().text();
+        $.post('/admin/topics/delete/'+id,function(){
+          location.reload();
+        });
+        
+      }
+      else{
+        console.log('khong xoa nua');
+      }
+    })
+  });
+</script>

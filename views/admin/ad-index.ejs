@@ -17,6 +17,8 @@
         crossorigin="anonymous"></script>
     <!-- font awesome -->
     <script src="https://kit.fontawesome.com/657afbf7b4.js" crossorigin="anonymous"></script>
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Style -->
     <link rel="stylesheet" href="stylesheets/admin-style.css">
 
@@ -25,6 +27,13 @@
 <body>
     <%- include('shared/header') %> 
     <%- include('shared/leftbar') %> 
-    <%- include('component/com-ad-topics') %> 
+    <%- include('component/com-ad-index') %> 
+
+    <script>
+        $(document).ready(function () {
+          $("ul.menuleft li").removeClass();
+          $("ul.menuleft li:nth-child(1)").addClass("active");
+        });
+      </script>
 </body>
 </html>

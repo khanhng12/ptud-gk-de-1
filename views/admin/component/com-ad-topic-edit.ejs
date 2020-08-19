@@ -1,0 +1,97 @@
+<section class="containerz">
+    <div class="content ml-2 mr-2 ">
+        <h4 class="pt-3 ml-4 col-8">Bài viết</h4>
+        <hr>
+        <form action="/admin/topics/edit/<%= baiViet[0].TieuDeURL %> " method="POST">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default" name="TieuDe">Tiêu đề</span>
+                </div>
+                <% if(baiViet) {%>
+                <input type="text" class="form-control" aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default" name="TieuDe" value="<%= baiViet[0].TieuDe %> ">
+                <% } else { %>
+                <input type="text" class="form-control" name="TieuDe" aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default">
+                <% } %>
+
+            </div>
+            <h5>Danh mục</h5>
+            <div class="categoriesList">
+                <ul class="category">
+                    <% for(let i =0;i <dsDanhMuc.length;i++) {%>
+                        <% var t=0; %> 
+                        <% for(let j=0;j<danhMuc.length;j++) {%> 
+                            <% if(dsDanhMuc[i].TenDanhMuc == danhMuc[j].TenDanhMuc) {%> 
+                                <% t=1; %> 
+                            <% } %> 
+                            
+                            
+                        <% } %> 
+                        <% if(t==1) {%> 
+                            <li>
+                                <label for="dm<%= i%>">
+                                    <input type="checkbox" checked = "checked" id="dm<%= i %>" >
+                                    <input type="text" hidden name="dm<%= i %>" value="<%= dsDanhMuc[i].IdDanhMuc %>">
+                                    <%=dsDanhMuc[i].TenDanhMuc.trim()%>
+                                </label>
+                            </li>
+                        <% }else { %>
+                            <li>
+                                <label for="dm<%= i%>">
+                                    <input type="checkbox" id="dm<%= i %>" >
+                                    <input type="text" hidden value="<%= dsDanhMuc[i].IdDanhMuc %>">
+                                    <%=dsDanhMuc[i].TenDanhMuc.trim()%>
+                                </label>
+                            </li>
+                            <% } %>  
+                    <% } %>
+                </ul>
+            </div>
+            <h5>Nội dung</h5>
+            <% if(baiViet) {%>
+            <textarea id="editor1" name="NoiDung"><%= baiViet[0].NoiDung%></textarea>
+            <% }else { %>
+            <textarea id="editor1" name="NoiDung"></textarea>
+            <% } %>
+            <button class="btn btn-light border mt-2 ml-2">Hủy</button>
+            <button class="btn btn-warning mt-2">Xóa hết</button>
+            <button class="btn btn-success mt-2 float-right mr-2" type="submit">Xác nhận</button>
+        </form>
+    </div>
+</section>
+
+<style>
+    .ck-editor__editable_inline {
+        min-height: 400px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("ul.menuleft li").removeClass('active');
+        $("ul.menuleft li:nth-child(2)").addClass("active");
+        $("ul.menuleft li").click(function () {
+            $("ul.menuleft li").removeClass('active');
+            $(this).toggleClass("active");
+        });
+        $("ul.category li label input").change(function(){
+            var parent = $(this).parent();
+            var name = parent.children().first().attr('id');
+            if($(this).attr('checked')==undefined){
+                $(this).attr('checked','checked');
+                parent.children().last().attr('name',name);
+            }
+            else{
+                $(this).removeAttr('checked');
+                parent.children().last().removeAttr('name');
+            }
+            console.log(parent.children().last());
+        })
+    });
+    ClassicEditor
+        .create(document.querySelector('#editor1'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>

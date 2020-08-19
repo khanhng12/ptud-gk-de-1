@@ -10,7 +10,7 @@
     height: 50px;
     width: 100%;
     background: #f1faee;
-    z-index: -10;
+    z-index: 1;
     border-bottom: 2px #6c757d solid;
 }
 
@@ -18,6 +18,7 @@
     font-size: 20px;
     line-height: 50px;
     margin-right: 10px;
+    z-index: 11;
 }
 
 
@@ -25,6 +26,7 @@
 
 /* Left nav bar */
 .leftnav {
+    z-index: 5;
     position: fixed;
     top: 0;
     width: 250px;
@@ -137,11 +139,48 @@ td > a > i:hover {
 }
 
 td > a:nth-child(1){
-    color: black;
-}
-
-td > a:nth-child(2){
     color: #ef233c;
 }
 
 /* End of container */
+/* Edit a topic */
+
+.categoriesList ul {
+    list-style-type: none;
+}
+
+.categoriesList ul li {
+    display: inline-block;
+}
+
+/* End of edit */
+
+/* Add card */
+
+.add-card {
+    width:20em;
+    height: 15em;
+    background: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-100%);
+    border: 1px solid #8d99ae;
+}
+
+.edit-card {
+    width:20em;
+    height: 15em;
+    background: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-100%);
+    border: 1px solid #8d99ae;
+}
+
+.hide {
+    display: none;
+}
+
+/* End of add card */
