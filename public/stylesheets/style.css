@@ -183,5 +183,9 @@ footer img {
     font-size: 11px;
     font-style: italic;
 }
+
+.hide {
+    display: none;
+}
 /* End of decorations*/
 
