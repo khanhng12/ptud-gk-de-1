@@ -60,7 +60,7 @@
         var trTag = $(this).parent().parent();
         var id = trTag.children().last().text();
         $.post('/admin/topics/delete/'+id,function(){
-          location.reload();
+        location.reload();
         });
         
       }

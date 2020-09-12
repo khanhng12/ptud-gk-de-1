@@ -2,7 +2,8 @@
     <div class="content ml-2 mr-2 ">
         <h4 class="pt-3 ml-4 col-8">Bài viết</h4>
         <hr>
-        <form action="/admin/topics/edit/<%= baiViet[0].TieuDeURL %> " method="POST">
+        <form class="mb-3" action="/admin/topics/edit/<%= baiViet[0].TieuDeURL %> " method="POST">
+            <button class="btn btn-success mb-2 float-right mr-2" type="submit">Xác nhận</button>
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroup-sizing-default" name="TieuDe">Tiêu đề</span>

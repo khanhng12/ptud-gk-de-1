@@ -45,9 +45,9 @@ header {
 .banner {
     height: 160px;
     width: 100%;
-    background:url(../img/logo.jpg);
+    background:url(../img/logo.png);
     background-position: center;
-    background-size: auto ;
+    background-size: contain ;
     background-repeat: no-repeat;
     cursor: pointer;
 }
@@ -57,8 +57,6 @@ header {
 }
 
 .main-menu {
-    border-top: 1px solid #b2bec3;
-    border-bottom: 1px solid #b2bec3;
     text-align: center;
     background-color: white;
     height: 50px;

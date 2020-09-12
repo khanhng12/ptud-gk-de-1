@@ -11,7 +11,7 @@
             </div>
             <h4 class="text-center mt-3 mb-3 font-weight-bold"> <%= topic[0].TieuDe %> </h4>
             <hr>
-            <p class="full-content">
+            <p class="full-content overflow-auto">
 
                 <!-- NoiDUng -->
                 <%= topic[0].NoiDung %>
@@ -37,83 +37,146 @@
             </div>
         </div>
     </div>
+    <% if(comments.length > 0) {%>
     <h4>Bình luận</h4>
-    <div class="card col-lg-8">
+    <div class="card col-lg-8 shadow">
         <div class="card-body">
-            <% for(let i = 0 ; i<comments.length;i++) {%> 
-                <div class="row pb-2 pt-2 border">
-                    <div class="col-md-2">
-                        <img src="/images/profile.jpg" class="img img-rounded img-fluid" style="border-radius: 50%;" />
-                        <p class="text-secondary text-center"> 1/1/2000 </p>
-                    </div>
-                    <div class="col-md-10">
-                        <p><a href=""><strong><%= comments[i].Ten %></strong></a></p>
-                        <div class="clearfix"></div>
-                        <p><%= comments[i].NoiDung %> </p>
-                        <p>
-                            <a class="float-right btn btn-outline-primary ml-2 reply"> <i class="fa fa-reply"></i> Reply</a>
-                            <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a>
-                            <div class="hide" style="border: 1px solid black; margin-top: 65px;">
-                                <form action="/reply" method="POST" class="mr-2 ml-2 mt-3 mb-2">
-                                    <input type="text" name="TieuDeURL" value="<%= thisId %> " hidden>
-                                    <input type="text" name="IdBinhLuan" value="<%= comments[i].IdBinhLuan %> " hidden>
-                                    <label for="name">Họ tên: <input type="text" name="HoTen" id="name" style="width: 200px;"></label>
-                                    <label for="gmail">Gmail: <input type="text" name="Email" id="gmail" style="width: 380px;"></label>
-                                    <textarea class="w-100" name="NoiDung"></textarea>
-                                    <button class="btn btn-success mt-2 mb-2">Gửi</button>
-                                </form>
+            <% for(let i = 0 ; i<comments.length;i++) {%>
+            <div class="row pb-2 pt-2 border shadow-sm mb-2">
+                <div class="col-md-2">
+                    <img src="/images/profile.jpg" class="img img-rounded img-fluid" style="border-radius: 50%;" />
+                    <% var thisDate = new Date(comments[i].NgayViet) %>
+                    <p class="text-secondary text-center"> <%= thisDate.toLocaleString() %> </p>
+                </div>
+                <div class="col-md-10">
+                    <p><a href=""><strong><%= comments[i].Ten %></strong></a></p>
+                    <div class="clearfix"></div>
+                    <p><%= comments[i].NoiDung %> </p>
+                    <p>
+                        <a class="float-right btn btn-outline-primary ml-2 reply"> <i class="fa fa-reply"></i> Reply</a>
+                        <!-- <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a> -->
+                    <div class="hide shadow" style=" margin-top: 65px;">
+                        <form action="/reply" method="POST" class="mr-2 ml-2 mt-3 mb-2">
+                            <input type="text" name="TieuDeURL" value="<%= thisId %> " hidden>
+                            <input type="text" name="IdBinhLuan" value="<%= comments[i].IdBinhLuan %> " hidden>
+                            <div class="input-group mb-3 pt-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Họ tên</span>
+                                </div>
+                                <input type="text" class="form-control save-name" name="HoTen"
+                                    aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                             </div>
-                        </p>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Email</span>
+                                </div>
+                                <input type="text" class="form-control save-email" name="Email"
+                                    aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Nội dung</label>
+                                <textarea class="form-control" name="NoiDung" rows="3"></textarea>
+                            </div>
+                            <button class="btn btn-success mt-2 mb-2 save-inputs">Gửi</button>
+                        </form>
+                    </div>
+                    </p>
+                </div>
+            </div>
+            <% for(var j =0;j<replyList.length;j++)  { %>
+            <%if (comments[i].IdBinhLuan == replyList[j].IdBinhLuan) { %>
+            <div class="shadow-sm card-inner ml-5 mr-5 pt-2 pb-2 mt-2 mb-2">
+                <div class="card-body ">
+                    <div class="row ">
+                        <div class="col-md-2">
+                            <img src="/images/profile.jpg" class="img img-rounded img-fluid"
+                                style="border-radius: 50%;" />
+                            <p class="text-secondary text-center"><%= replyList[j].NgayViet.getDate() %> </p>
+                        </div>
+                        <div class="col-md-10">
+                            <p><a href="https://maniruzzaman-akash.blogspot.com/p/contact.html"><strong><%= replyList[j].Ten %>
+                                    </strong></a></p>
+                            <p><%= replyList[j].NoiDung %> </p>
+                            <!-- <p>
+                                <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a>
+                            </p> -->
+                        </div>
                     </div>
                 </div>
-                <% for(var j =0;j<replyList.length;j++)  { %> 
-                    <%if (comments[i].IdBinhLuan == replyList[j].IdBinhLuan) { %>
-                        <div class="card card-inner ml-5 mr-5 pt-2 pb-2">
-                            <div class="card-body ">
-                                <div class="row ">
-                                    <div class="col-md-2">
-                                        <img src="/images/profile.jpg" class="img img-rounded img-fluid"
-                                            style="border-radius: 50%;" />
-                                        <p class="text-secondary text-center"><%= replyList[j].NgayViet.getDate() %> </p>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <p><a href="https://maniruzzaman-akash.blogspot.com/p/contact.html"><strong><%= replyList[j].Ten %> </strong></a></p>
-                                        <p><%= replyList[j].NoiDung %> </p>
-                                        <p>
-                                            <a class="float-right btn btn-outline-primary ml-2"> <i class="fa fa-reply"></i>
-                                                Reply</a>
-                                            <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <% } %> 
-                <% } %> 
-            <%} %> 
-            
+            </div>
+            <% } %>
+            <% } %>
+            <%} %>
+
         </div>
     </div>
+    <%} %>
 
-    <div class="card col-lg-8 mt-3">
+    <div class="card col-lg-8 mt-3 shadow mb-3">
         <h4 class="mt-2">Để lại bình luận</h4>
         <form action="/comment" method="POST">
             <input type="text" name="TieuDeURL" value="<%= thisId %> " hidden>
-            <label for="name">Họ tên: <input type="text" name="HoTen" id="name" style="width: 200px;"></label>
-            <label for="gmail">Gmail: <input type="text" name="Email" id="gmail" style="width: 380px;"></label>
-            <textarea class="w-100" name="NoiDung"></textarea>
-            <button class="btn btn-success mt-2 mb-2">Gửi</button>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Họ tên</span>
+                </div>
+                <input type="text" class="form-control save-name" name="HoTen" aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Email</span>
+                </div>
+                <input type="text" class="form-control save-email" name="Email" aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Nội dung</label>
+                <textarea class="form-control" name="NoiDung" rows="3"></textarea>
+            </div>
+            <button class="btn btn-success mt-2 mb-2 save-inputs">Gửi</button>
         </form>
     </div>
 </div>
 <script>
+    //validate Email
+    function validateEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+
     $(document).ready(function () {
         var fullContent = $('.full-content').text();
         $('.full-content').html(fullContent);
 
-        $('.reply').click(function(){
+        $('.reply').click(function () {
             var parent = $(this).parent().parent();
             parent.children('div').toggleClass('hide');
         });
+        //Điền thông tin đọc giả vào các field
+        $('.save-name').prop('value', localStorage.getItem('name'));
+        $('.save-email').prop('value', localStorage.getItem('email'));
+    });
+
+    //Lưu thông tin đọc giả vào localstorage
+    $('.save-inputs').click(function () {
+
+        var thisForm = $(this).parent();
+        var name = thisForm.find('.save-name').prop('value');
+        var email = thisForm.find('.save-email').prop('value');
+        if (!name) {
+            event.preventDefault();
+            alert('Tên không được để trống!');
+        }
+        if (!email) {
+            event.preventDefault();
+            alert('Email không được để trống!');
+        }
+        if (!validateEmail(email)) {
+            event.preventDefault();
+            alert('Email không hợp lệ!');
+        }
+        localStorage.setItem('name', name);
+        localStorage.setItem('email', email);
     });
 </script>

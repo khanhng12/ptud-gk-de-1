@@ -154,7 +154,40 @@ router.post('/addnew',verifyToken.checkToken,verifyToken.protectRoute, (req,res)
 });
 //Delete a topic 
 router.post('/delete/:id',verifyToken.checkToken,verifyToken.protectRoute, (req,res) =>{
+  var idNeedToDelete = req.params.id;
+
+  var deleteReplies = "DELETE FROM traloi WHERE IdBinhLuan IN (SELECT IdBinhLuan FROM binhluan WHERE TieuDeURL = ?);";
+  var deleteComments = "DELETE FROM binhluan WHERE TieuDeURL = ?;";
+  var deleteCategoriesLink = "DELETE FROM baiviet_danhmuc WHERE TieuDeURL = ?;"
   var deleteTopic = "DELETE FROM baiviet WHERE TieuDeURL = ?;";
+  //Delete replies
+  connection.query(deleteReplies,[idNeedToDelete], (err,rs)=>{
+    if(err) console.log(err);
+    else {
+      console.log('Xoa tra loi lien quan thanh cong!')
+      // delete comments
+      connection.query(deleteComments,[idNeedToDelete],(err,rs) =>{
+        if(err) console.log(err);
+        else {
+          console.log('Xoa binh luan lien quan thanh cong!');
+          //delete from baiviet_danhmuc
+          connection.query(deleteCategoriesLink,[idNeedToDelete],(err,rs) =>{
+            if(err) console.log(err);
+            else {
+              console.log('Xoa baiviet_danhmuc thanh cong!');
+              //delete from topic
+              connection.query(deleteTopic,[idNeedToDelete],(err,rs) =>{
+                if(err) console.log(err);
+                else {
+                  console.log('Xoa bai viet thanh cong tot dep!');
+                }
+              })
+            }
+          })
+        }
+      });
+    }
+  });
   
   connection.query(deleteTopic,[req.params.id],(err,rs) =>{
     if(err) console.log(err);

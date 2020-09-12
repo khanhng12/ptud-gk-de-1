@@ -1,0 +1,77 @@
+<div class="container">
+    <div class="row ">
+        <div class="col-lg-8 col-sm-12 bg-white mb-3 new-list border-top border-dark shadow-sm">
+            <h4 class="text-center mt-3 mb-3">Danh mục : <%= thisCategoryName %> </h4>
+            <hr>
+            <div class="list">
+                <% if(list.length===0) {%>
+                <div class="alert alert-danger" role="alert">
+                    Hiện tại không có bài viết nào thuộc danh mục này
+                  </div>
+                <%} else {%>
+                <% for(var i=0;i<list.length;i++) { %>
+                <div class="row col-lg-12 shadow-sm mt-5 mb-5">
+                    <div class="col-lg-6 img-container">
+                        <a style="width: 100%;" href="/<%= list[i].TieuDeURL %> "><img class="normal-img"
+                                src="/img/anh1.png" alt=""></a>
+                    </div>
+                    <div class="col-lg-6">
+                        <h4><a class="text-success text-decoration-none"
+                                href="/<%= list[i].TieuDeURL %>"><%= list[i].TieuDe%></a></h4>
+                        <div class="small-txt">
+                            Đăng ngày : <%= list[i].NgayViet %> Bởi : <%= list[i].Ten %>
+                        </div>
+                        <div class="sort-content mt-2">
+                            <% var introContent = list[i].NoiDung;%>
+                            <%= introContent.slice(0,300) %>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+                <%} %>
+
+            </div>
+            <% if(list.length>0) {%>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end">
+                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="/page/1">1</a></li>
+                        <li class="page-item"><a class="page-link" href="/page/2">2</a></li>
+                        <li class="page-item"><a class="page-link" href="/page/3">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            <% } %> 
+        </div>
+        <div class="col-lg-4 right-list">
+            <div class="col-lg-12 bg-white border-top border-dark text-center shadow-sm">
+                <p class="mt-3 text-info">Bài viết nổi bật</p>
+                <hr>
+                <% for(let i=0 ; i< topTopics.length;i++) {%>
+                <a class="text-dark" href=" /<%= topTopics[i].TieuDeURL %> "><%= topTopics[i].TieuDe %> </a>
+                <hr>
+                <% } %>
+            </div>
+            <div class="col-lg-12 bg-white mt-2 border-top border-dark text-center shadow-sm">
+                <p class="mt-3 text-info">Page Facebook</p>
+                <hr>
+                <iframe
+                    src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fhusc.edu.vn%2F&tabs=timeline&width=340&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
+                    width="300" height="500" style="border:none;overflow:hidden" scrolling="no" frameborder="0"
+                    allowTransparency="true" allow="encrypted-media"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $('.sort-content').each(function (index, value) {
+            var content = value.textContent;
+            content = content.replace(/<[^>]+>/g, '');
+            $(this).text(content.slice(0, 150) + "...");
+            console.log(content);
+        })
+    })
+</script>

@@ -16,8 +16,8 @@
                 <ul class="category">
                     <% for(let i =0;i < list.length;i++) {%> 
                         <li><label for="dm<%= i%>">
-                            <input type="checkbox">
-                            <input type="text" id="dm<%= i %>" value="<%= list[i].IdDanhMuc %>" hidden>
+                            <input id="dm<%= i %>" type="checkbox">
+                            <input type="text" value="<%= list[i].IdDanhMuc %>" hidden>
                             <%=list[i].TenDanhMuc%>
                         </label></li>
                     <% } %> 

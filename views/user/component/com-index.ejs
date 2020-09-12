@@ -3,23 +3,25 @@
         <div class="col-lg-8 col-sm-12 bg-white mb-3 new-list border-top border-dark shadow-sm">
             <h4 class="text-center mt-3 mb-3">Bài viết mới</h4>
             <hr>
-            <% for(var i=0;i<length;i++) { %> 
-                <div class="row col-lg-12 shadow-sm mt-5 mb-5">
-                    <div class="col-lg-6 img-container">
-                        <a style="width: 100%;" href="/<%= list[i].TieuDeURL %> "><img class="normal-img" src="/img/anh1.png" alt=""></a>
-                    </div>
-                    <div class="col-lg-6">
-                        <h4><a class="text-success text-decoration-none" href="/<%= list[i].TieuDeURL %>"><%= list[i].TieuDe%></a></h4>
-                        <div class="small-txt">
-                            Đăng ngày : <%= list[i].NgayViet %>  Bởi : <%= list[i].Ten %> 
+            <div class="list">
+                <% for(var i=0;i<length;i++) { %> 
+                    <div class="row col-lg-12 shadow-sm mt-5 mb-5">
+                        <div class="col-lg-6 img-container">
+                            <a style="width: 100%;" href="/<%= list[i].TieuDeURL %> "><img class="normal-img" src="/images/bg.jpg" alt=""></a>
                         </div>
-                        <div class="sort-content mt-2">
-                            <% var introContent = list[i].NoiDung;%> 
-                            <%= introContent.slice(0,100) %>...
+                        <div class="col-lg-6">
+                            <h4><a class="text-success text-decoration-none" href="/<%= list[i].TieuDeURL %>"><%= list[i].TieuDe%></a></h4>
+                            <div class="small-txt">
+                                Đăng ngày : <%= list[i].NgayViet.toLocaleString() %>  Bởi : <%= list[i].Ten %> 
+                            </div>
+                            <div class="sort-content mt-2">
+                                <% var introContent = list[i].NoiDung;%> 
+                                <%= introContent.slice(0,300) %>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <% } %> 
+                <% } %> 
+            </div>
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end">
                   <li class="page-item"><a class="page-link" href="#">Previous</a></li>
@@ -49,4 +51,13 @@
 </div>
 
 <script>
+
+    $(document).ready(function(){
+        $('.sort-content').each(function(index,value) {
+            var content = value.textContent;
+            content = content.replace(/<[^>]+>/g,'');
+            $(this).text(content.slice(0,150)+"...");
+            console.log(content);
+        })
+    })
 </script>

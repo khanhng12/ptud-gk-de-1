@@ -46,12 +46,26 @@ router.post('/edit',verifyToken.checkToken,verifyToken.protectRoute,(req,res) =>
   });
 });
 
+//Xóa một danh mục
+
 router.post('/delete/:idDanhMuc',verifyToken.checkToken,verifyToken.protectRoute,(req,res) =>{
   var deleteCategory = "DELETE FROM danhmuc WHERE IdDanhMuc = ?;";
+  var deleteLink = "DELETE FROM baiviet_danhmuc WHERE IdDanhMuc = ?;"
 
-  connection.query(deleteCategory,[req.params.idDanhMuc],function (err,rs) {
-    if(err) console.log(err);
-    res.redirect('/admin/categories');
+  var needDeleteId = req.params.idDanhMuc;
+
+  connection.query(deleteLink,[needDeleteId], (err,rs) =>{
+    if(err) console.log(err)
+    else {
+      console.log('Da xoa lien ket cua danh muc nay');
+      connection.query(deleteCategory,[needDeleteId],function (err,rs) {
+        if(err) console.log(err);
+        else{
+          
+          res.redirect('/admin/categories');
+        }
+      });
+    }
   });
 });
 

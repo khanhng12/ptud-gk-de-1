@@ -9,9 +9,9 @@ var connection = config.connection;
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  var getListSql = 'select * from baiviet inner join taikhoan on tacgia = taikhoan order by NgayViet asc limit 10;';
+  var getListSql = 'select * from baiviet inner join taikhoan on tacgia = taikhoan order by NgayViet desc limit 10;';
   var getTopSql = 'select TieuDeURL,TieuDe from baiviet order by LuotXem desc limit 3;';
-  var getCategoriesSql = 'select TenDanhMuc from DanhMuc';
+  var getCategoriesSql = 'select * from DanhMuc';
   var sql = getListSql + getTopSql + getCategoriesSql;
   connection.query(sql, function (error, results, fields) {
     if (results) {
@@ -30,7 +30,7 @@ router.get('/', function (req, res, next) {
 router.get('/page/:number', (req, res, next) => {
   var getListSql = 'select * from baiviet inner join taikhoan on tacgia = taikhoan order by NgayViet asc limit 10 offset ' + (req.params.number * 10 - 10) + ';';
   var getTopSql = 'select TieuDeURL,TieuDe from baiviet order by LuotXem desc limit 3;';
-  var getCategoriesSql = 'select TenDanhMuc from DanhMuc';
+  var getCategoriesSql = 'select * from DanhMuc';
   var sql = getListSql + getTopSql + getCategoriesSql;
   connection.query(sql, function (error, results, fields) {
     if (results) {
@@ -51,7 +51,7 @@ router.get('/:item', (req, res) => {
 
   var getItemSql = 'SELECT * FROM baiviet where TieuDeURL = ?;';
   var getTopSql = 'select TieuDeURL,TieuDe from baiviet order by LuotXem desc limit 3;';
-  var getCategoriesSql = 'select TenDanhMuc from DanhMuc;';
+  var getCategoriesSql = 'select * from DanhMuc;';
   var getCategoriesTopicSql = 'SELECT TenDanhMuc FROM DanhMuc INNER JOIN BaiViet_DanhMuc ON DanhMuc.IdDanhMuc = BaiViet_DanhMuc.IdDanhMuc where BaiViet_DanhMuc.TieuDeURL = ?;';
   var getCommentsByTopicId = 'SELECT * FROM binhluan INNER JOIN thongtindocgia ON binhluan.IdDocGia = thongtindocgia.IdDocGia  WHERE TieuDeURL = ? ORDER BY IdBinhLuan DESC LIMIT 10;';
   var getReplyList = 'SELECT NoiDung,traloi.IdBinhLuan,NgayViet,Ten,Email FROM traloi INNER JOIN thongtindocgia ON traloi.IdDocGia = thongtindocgia.IdDocGia WHERE IdBinhLuan IN (SELECT IdBinhLuan FROM binhluan WHERE TieuDeURL = ?);'
@@ -140,20 +140,12 @@ router.post('/reply', (req, res) => {
             console.log(err);
           else {
             console.log('Them tai khoan nguoi doc thanh cong!');
-            console.log('-------------------------------------------------');
+            console.log('-------------------------------------------------001');
             var idNguoiDoc = rs.insertId;
-            //Them tai khoan vao cookie
             connection.query(getReaderInfo, [rs.insertId], (err, rs) => {
               if (err)
                 console.log(err);
               else {
-                var user = {
-                  IdDocGia: String(rs[0].IdDocGia),
-                  Ten: String(rs[0].Ten),
-                  Email: String(rs[0].Email)
-                }
-                console.log(JSON.stringify(user));
-                res.cookie('User', JSON.stringify(user), { maxAge: 900000 });
                 console.log('Tien hanh tao tra loi binh luan');
                 console.log('-------------------------------------------------');
                 connection.query(createReply, [req.body.NoiDung, req.body.IdBinhLuan, idNguoiDoc, new Date()], (err, rs) => {
@@ -183,6 +175,42 @@ router.post('/reply', (req, res) => {
           }
         })
       }
+    }
+  })
+})
+
+// search
+router.get('/search/:keyword', (req,res) =>{
+  var keyword = req.params.keyword;
+  keyword = "%"+keyword+"%";
+  var getTopicListByKeyWord = "SELECT * FROM baiviet WHERE TieuDeURL LIKE '" +keyword+"';";
+  var getTopSql = 'select TieuDeURL,TieuDe from baiviet order by LuotXem desc limit 3;';
+  var getCategoriesSql = 'select * from DanhMuc;';
+
+  var sql = getTopicListByKeyWord + getCategoriesSql+getTopSql;
+  connection.query(sql, (err,rs) =>{
+    if(err) console.log(err);
+    else {
+      res.locals.keyword = req.params.keyword;
+      res.render('user/search',{list : rs[0],categories : rs[1],topTopics : rs[2]});
+    }
+  })
+})
+
+//search by category id
+router.get('/categories/:item',(req,res) =>{
+  var getTopicListByCategory = "SELECT * FROM baiviet_danhmuc INNER JOIN baiviet ON baiviet_danhmuc.TieuDeURL = baiviet.TieuDeURL WHERE IdDanhMuc = ?;";
+  var getTopSql = 'select TieuDeURL,TieuDe from baiviet order by LuotXem desc limit 3;';
+  var getCategoriesSql = 'select * from DanhMuc;';
+  var getNameThisCategory = "SELECT TenDanhMuc FROM DanhMuc WHERE IdDanhMuc = ?;";
+
+  var sql = getTopicListByCategory+ getCategoriesSql + getTopSql +getNameThisCategory;
+  connection.query(sql,[req.params.item,req.params.item],(err,rs) =>{
+    if(err) console.log(err);
+    else {
+      res.locals.thisCategoryName = rs[3][0].TenDanhMuc;
+      console.log('Ten danh muc hien tai : '+rs[3]);
+      res.render('user/categories',{list : rs[0],categories : rs[1],topTopics : rs[2]});
     }
   })
 })

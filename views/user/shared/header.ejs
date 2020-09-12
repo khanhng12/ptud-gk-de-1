@@ -12,22 +12,33 @@
     </div>
 </section>
 <header>
-    
-    <div class="main-menu">
+    <div class="main-menu shadow">
         <ul>
             <li><a href="/">Home</a></li>
             <li class="mini-menu">
                 <a href="#">Thể loại<i class="fa fa-chevron-down pl-2" aria-hidden="true"></i></a>
                 <ul>
-                    <% for(let i=0;i<categories.length;i++) {%> 
-                        <li><%= categories[i].TenDanhMuc %></li>
-                    <% } %> 
+                    <% for(let i=0;i<categories.length;i++) {%>
+                    <li><a href="/categories/<%= categories[i].IdDanhMuc %>"> <%= categories[i].TenDanhMuc %></a></li>
                     
+                    <% } %>
+
                 </ul>
             </li>
-            <li><a href="#">Fun Fact</a></li>
-            <li><a href="#">Cơ sở dữ liệu</a></li>
-            <li class="search"><input class="inp" type="text"><a href=""><i class="fas fa-search"></i></a></li>
+            <li class="search"><input class="inp" id="input" type="text"><a href=""><i class="fas fa-search"></i></a>
+            </li>
         </ul>
     </div>
 </header>
+
+<script>
+    var input = document.getElementById('input');
+
+    input.addEventListener('keyup', function (event) {
+        if (event.keyCode === 13) {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            window.location.href = '/search/'+ input.value.trim();
+        }
+    })
+</script>

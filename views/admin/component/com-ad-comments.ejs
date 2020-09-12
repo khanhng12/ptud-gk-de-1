@@ -1,21 +1,63 @@
+<style>
+    .delete {
+        color: red;
+    }
+
+    .delete:hover{
+        cursor: pointer;
+        color: #9d0208;
+    }
+
+    .fa-trash {
+        padding-left: 20px;
+        padding-top: 50px; 
+    }
+
+    .fa-reply {
+        padding-left: 20px;
+        padding-top: 50px; 
+    }
+
+    .reply:hover {
+        cursor: pointer;
+        color: #3a86ff;
+    }
+</style>
 <section class="containerz">
     <% for(let i=0;i<comments.length;i++){%>
     <div class="shadow-sm row">
+        <p class="id" hidden><%= comments[i].IdBinhLuan %> </p>
         <div class="col-md-2">
             <img class="shadow mt-3 mt-4" src="/images/profile.jpg" alt="avatar"
                 style="width: 70px;height: 70px;border-radius: 50%; margin-left: 70px;">
             <p class="text-center"><a href="#"><%= comments[i].Ten %> </a></p>
         </div>
-        <div class="col-md-9 font-italic border-left">
-            <p style="font-size: 12px;margin-top: 10px;"><%= comments[i].NgayViet %> 0</p>
-            <a href="/<%= comments[i].TieuDeURL %> "><%= comments[i].TieuDeURL %> </a>
+        <div class="col-md-8 font-italic border-left">
+            <% var thisDate = new Date(comments[i].NgayViet) %> 
+            <p style="font-size: 12px;margin-top: 10px;"><%= thisDate.toLocaleString() %></p>
+            <a href="/<%= comments[i].TieuDeURL %> "><%= comments[i].TieuDe %> </a>
             <p><%= comments[i].NoiDung %> </p>
         </div>
-
         <div class="col-md-1 border-left">
-            <a class="fa fa-trash" href="#" style="padding-left: 20px; padding-top: 50px; color: red;"></a>
+            <span class="reply"><a class="fa fa-reply"></a></span>
+        </div>
+        <div class="col-md-1 border-left">
+            <span class="delete"><a class="fa fa-trash"></a></span>
         </div>
     </div>
     <% } %>
     </div>
 </section>
+
+<script>
+    $(document).ready(function(){
+        $('.fa-trash').click(function(){
+            var confirmed = confirm('Chắc chắn chứ?');
+            if(confirmed){
+                var theRow = $(this).parent().parent().parent();
+                $.post('/admin/comments/delete/'+ theRow.find($('p.id')).text());
+                location.reload();
+            }
+        })
+    })
+</script>

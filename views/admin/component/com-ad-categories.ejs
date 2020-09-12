@@ -12,7 +12,7 @@
                 <tr>
                   <td><%= categories[i].IdDanhMuc %> </td>
                   <td><a class="edit-category text-primary" href="#" name = 'hiall'><%= categories[i].TenDanhMuc %></a></td>
-                  <td><a class="delete" href="#"><i class="fas fa-trash"></i></a></td>
+                  <td><a class="delete "><i class="fas fa-trash"></i></a></td>
                 </tr>
               <% } %>
             </tbody>
@@ -82,11 +82,9 @@
         console.log('Đang tạo form yêu cầu xóa danh mục');
         var theForm = document.createElement('form');
         theForm.action = '/admin/categories/delete/' + idCategory.text().trim().toString();
-        console.log('action:'+ theForm.action);
         theForm.method = 'POST';
         $('body').append(theForm);
         theForm.submit();
-        console.log('Đã gửi yêu cầu xóa danh mục có id = '+ idCategory.text().trim());
       }
     });
   })
